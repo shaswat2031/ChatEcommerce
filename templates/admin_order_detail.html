@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order #{{ order.order_number }} - Admin</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .animate-fadeInUp {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .animate-slideInLeft {
+        animation: slideInLeft 0.5s ease-out;
+      }
+
+      .animate-modalFadeIn {
+        animation: modalFadeIn 0.3s ease-out;
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .btn-hover {
+        transition: all 0.3s ease;
+      }
+
+      .btn-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .nav-link {
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover {
+        transform: translateY(-2px);
+      }
+
+      .table-row {
+        transition: all 0.2s ease;
+      }
+
+      .table-row:hover {
+        background-color: #f8fafc;
+        transform: scale(1.01);
+      }
+
+      .status-badge {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50 min-h-screen">
+    <nav class="bg-white shadow-lg border-b border-blue-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-3 animate-fadeInUp">
+            <a
+              href="/admin/orders"
+              class="text-3xl hover:scale-110 transition-transform duration-300"
+              >📋</a
+            >
+            <h1 class="text-xl font-bold text-gray-800">
+              Order #{{ order.order_number }}
+            </h1>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a
+              href="/admin/dashboard"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >Dashboard</a
+            >
+            <a
+              href="/admin/orders"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >All Orders</a
+            >
+            <a
+              href="/logout"
+              class="text-red-600 hover:text-red-800 font-medium nav-link"
+              >Logout</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto p-6">
+      <!-- Enhanced Order Header -->
+      <div
+        class="bg-white rounded-2xl shadow-lg p-8 mb-8 card-hover animate-fadeInUp"
+      >
+        <div class="flex justify-between items-start">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">
+              Order #{{ order.order_number }}
+            </h2>
+            <p class="text-gray-600 text-lg mb-3">
+              Placed on {{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+            </p>
+            <p class="text-2xl font-bold text-green-600">
+              ${{ "%.2f"|format(order.total_amount) }}
+            </p>
+          </div>
+          <div class="text-right">
+            <div class="mb-6">
+              <span
+                class="inline-block px-6 py-3 rounded-2xl text-lg font-semibold status-badge {% if order.status == 'Delivered' %}bg-green-100 text-green-800 {% elif order.status == 'Shipped' %}bg-blue-100 text-blue-800 {% elif order.status == 'Confirmed' %}bg-yellow-100 text-yellow-800 {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800 {% else %}bg-gray-100 text-gray-800{% endif %}"
+              >
+                {{ order.status }}
+              </span>
+            </div>
+            <button
+              onclick="showStatusModal()"
+              class="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 btn-hover font-semibold"
+            >
+              Update Status
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Enhanced Customer Information -->
+        <div
+          class="bg-white rounded-2xl shadow-lg p-6 card-hover animate-slideInLeft"
+        >
+          <h3
+            class="text-xl font-semibold mb-6 text-gray-800 flex items-center"
+          >
+            <span class="text-2xl mr-3">👤</span>
+            Customer Information
+          </h3>
+          <div class="space-y-4">
+            <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+              <p class="text-sm text-blue-600 font-medium">Customer:</p>
+              <p class="font-semibold text-gray-800 text-lg">
+                {{ order.user.full_name or order.user.username }}
+              </p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+              <p class="text-sm text-gray-600 font-medium">Email:</p>
+              <p class="font-semibold text-gray-800">
+                {{ order.user.email or 'Not provided' }}
+              </p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+              <p class="text-sm text-gray-600 font-medium">Phone:</p>
+              <p class="font-semibold text-gray-800">
+                {{ order.user.phone or 'Not provided' }}
+              </p>
+            </div>
+            <div class="p-4 bg-green-50 rounded-xl border border-green-200">
+              <p class="text-sm text-green-600 font-medium">Customer Since:</p>
+              <p class="font-semibold text-gray-800">
+                {{ order.user.created_at.strftime('%B %Y') }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Shipping Information -->
+        <div
+          class="bg-white rounded-2xl shadow-lg p-6 card-hover animate-slideInLeft"
+          style="animation-delay: 0.1s"
+        >
+          <h3
+            class="text-xl font-semibold mb-6 text-gray-800 flex items-center"
+          >
+            <span class="text-2xl mr-3">🚚</span>
+            Shipping Information
+          </h3>
+          <div class="space-y-4">
+            <div>
+              <p class="text-sm text-gray-600 font-medium mb-3">
+                Shipping Address:
+              </p>
+              <div
+                class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm"
+              >
+                <p class="font-semibold text-gray-800 whitespace-pre-line">
+                  {{ order.shipping_address }}
+                </p>
+              </div>
+            </div>
+            <div class="p-4 bg-blue-50 rounded-xl border border-blue-200">
+              <p class="text-sm text-blue-600 font-medium">Payment Method:</p>
+              <p class="font-semibold text-gray-800">
+                {{ order.payment_method }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Order Items -->
+      <div
+        class="mt-8 bg-white rounded-2xl shadow-lg p-6 card-hover animate-fadeInUp"
+        style="animation-delay: 0.2s"
+      >
+        <h3 class="text-xl font-semibold mb-6 text-gray-800 flex items-center">
+          <span class="text-2xl mr-3">📦</span>
+          Order Items ({{ order.items|length }})
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-blue-50">
+              <tr>
+                <th
+                  class="px-6 py-4 text-left text-sm font-semibold text-blue-800 uppercase tracking-wider"
+                >
+                  Product
+                </th>
+                <th
+                  class="px-6 py-4 text-left text-sm font-semibold text-blue-800 uppercase tracking-wider"
+                >
+                  Price
+                </th>
+                <th
+                  class="px-6 py-4 text-left text-sm font-semibold text-blue-800 uppercase tracking-wider"
+                >
+                  Quantity
+                </th>
+                <th
+                  class="px-6 py-4 text-left text-sm font-semibold text-blue-800 uppercase tracking-wider"
+                >
+                  Total
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              {% for item in order.items %}
+              <tr class="table-row">
+                <td class="px-6 py-4">
+                  <div class="font-semibold text-gray-900 text-lg">
+                    {{ item.product_name }}
+                  </div>
+                  <div
+                    class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded mt-1 inline-block"
+                  >
+                    Product ID: {{ item.product_id }}
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-lg font-medium text-gray-900">
+                  ${{ "%.2f"|format(item.price) }}
+                </td>
+                <td class="px-6 py-4">
+                  <span
+                    class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+                  >
+                    {{ item.quantity }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-lg font-bold text-green-600">
+                  ${{ "%.2f"|format(item.total) }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot class="bg-green-50">
+              <tr>
+                <td
+                  colspan="3"
+                  class="px-6 py-4 text-right font-bold text-lg text-gray-800"
+                >
+                  Order Total:
+                </td>
+                <td class="px-6 py-4 font-bold text-2xl text-green-600">
+                  ${{ "%.2f"|format(order.total_amount) }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Status Update Modal -->
+    <div
+      id="statusModal"
+      class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-2xl p-8 w-96 shadow-2xl animate-modalFadeIn">
+        <h3 class="text-xl font-semibold mb-6 text-gray-800">
+          Update Order Status
+        </h3>
+        <div class="space-y-4">
+          <label
+            class="flex items-center p-3 border-2 border-gray-200 rounded-xl hover:border-blue-300 transition-colors duration-300 cursor-pointer"
+          >
+            <input
+              type="radio"
+              name="status"
+              value="Processing"
+              class="mr-3 text-blue-600"
+            />
+            <span class="font-medium">Processing</span>
+          </label>
+          <label
+            class="flex items-center p-3 border-2 border-gray-200 rounded-xl hover:border-blue-300 transition-colors duration-300 cursor-pointer"
+          >
+            <input
+              type="radio"
+              name="status"
+              value="Confirmed"
+              class="mr-3 text-blue-600"
+            />
+            <span class="font-medium">Confirmed</span>
+          </label>
+          <label
+            class="flex items-center p-3 border-2 border-gray-200 rounded-xl hover:border-blue-300 transition-colors duration-300 cursor-pointer"
+          >
+            <input
+              type="radio"
+              name="status"
+              value="Shipped"
+              class="mr-3 text-blue-600"
+            />
+            <span class="font-medium">Shipped</span>
+          </label>
+          <label
+            class="flex items-center p-3 border-2 border-gray-200 rounded-xl hover:border-blue-300 transition-colors duration-300 cursor-pointer"
+          >
+            <input
+              type="radio"
+              name="status"
+              value="Delivered"
+              class="mr-3 text-blue-600"
+            />
+            <span class="font-medium">Delivered</span>
+          </label>
+          <label
+            class="flex items-center p-3 border-2 border-gray-200 rounded-xl hover:border-blue-300 transition-colors duration-300 cursor-pointer"
+          >
+            <input
+              type="radio"
+              name="status"
+              value="Cancelled"
+              class="mr-3 text-blue-600"
+            />
+            <span class="font-medium">Cancelled</span>
+          </label>
+        </div>
+        <div class="mt-8 flex space-x-4">
+          <button
+            onclick="updateStatus()"
+            class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 btn-hover font-semibold"
+          >
+            Update
+          </button>
+          <button
+            onclick="hideStatusModal()"
+            class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-xl hover:bg-gray-600 btn-hover font-semibold"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showStatusModal() {
+        document.getElementById("statusModal").classList.remove("hidden");
+        document.getElementById("statusModal").classList.add("flex");
+        // Set current status as selected
+        const currentStatus = "{{ order.status }}";
+        const radio = document.querySelector(`input[value="${currentStatus}"]`);
+        if (radio) radio.checked = true;
+      }
+
+      function hideStatusModal() {
+        document.getElementById("statusModal").classList.add("hidden");
+        document.getElementById("statusModal").classList.remove("flex");
+      }
+
+      async function updateStatus() {
+        const selectedStatus = document.querySelector(
+          'input[name="status"]:checked'
+        );
+        if (!selectedStatus) {
+          alert("Please select a status");
+          return;
+        }
+
+        console.log("Updating status to:", selectedStatus.value);
+
+        try {
+          const response = await fetch(
+            "/admin/order/{{ order._id }}/update-status",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                status: selectedStatus.value,
+              }),
+            }
+          );
+
+          console.log("Response status:", response.status);
+          console.log("Response ok:", response.ok);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const result = await response.json();
+          console.log("Response data:", result);
+
+          if (result.success) {
+            alert(result.message);
+
+            // Update the status badge on the page
+            const statusBadge = document.querySelector(".status-badge");
+            if (statusBadge) {
+              statusBadge.textContent = result.new_status;
+
+              // Update badge color classes
+              statusBadge.className =
+                "inline-block px-6 py-3 rounded-2xl text-lg font-semibold status-badge";
+              if (result.new_status === "Delivered") {
+                statusBadge.className += " bg-green-100 text-green-800";
+              } else if (result.new_status === "Shipped") {
+                statusBadge.className += " bg-blue-100 text-blue-800";
+              } else if (result.new_status === "Confirmed") {
+                statusBadge.className += " bg-yellow-100 text-yellow-800";
+              } else if (result.new_status === "Cancelled") {
+                statusBadge.className += " bg-red-100 text-red-800";
+              } else {
+                statusBadge.className += " bg-gray-100 text-gray-800";
+              }
+            }
+
+            hideStatusModal();
+          } else {
+            alert("Error: " + result.message);
+          }
+        } catch (error) {
+          console.error("Error updating status:", error);
+          alert("Network error. Please try again. Error: " + error.message);
+        }
+      }
+
+      // Close modal when clicking outside
+      document
+        .getElementById("statusModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            hideStatusModal();
+          }
+        });
+
+      // Add keyboard support
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          hideStatusModal();
+        }
+      });
+    </script>
+  </body>
+</html>

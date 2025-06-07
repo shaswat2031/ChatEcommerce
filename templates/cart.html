@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart - E-commerce</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-5px);
+        }
+        60% {
+          transform: translateY(-3px);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      .animate-fadeInUp {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .animate-slideInLeft {
+        animation: slideInLeft 0.5s ease-out;
+      }
+
+      .animate-bounce-slow {
+        animation: bounce 2s infinite;
+      }
+
+      .animate-shake {
+        animation: shake 0.5s ease-in-out;
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .nav-link {
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-hover {
+        transition: all 0.3s ease;
+      }
+
+      .btn-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .item-hover {
+        transition: all 0.3s ease;
+      }
+
+      .item-hover:hover {
+        background-color: #f8fafc;
+        transform: scale(1.02);
+        border-radius: 12px;
+      }
+
+      .product-image {
+        transition: all 0.3s ease;
+      }
+
+      .product-image:hover {
+        transform: scale(1.1);
+      }
+
+      .remove-btn {
+        transition: all 0.3s ease;
+      }
+
+      .remove-btn:hover {
+        transform: scale(1.1);
+        animation: shake 0.5s ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50 min-h-screen">
+    <nav class="bg-white shadow-lg border-b border-blue-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-3 animate-fadeInUp">
+            <a
+              href="/chat"
+              class="text-3xl hover:scale-110 transition-transform duration-300 animate-bounce-slow"
+              >🛒</a
+            >
+            <h1 class="text-xl font-bold text-gray-800">Shopping Cart</h1>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a
+              href="/dashboard"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >Dashboard</a
+            >
+            <a
+              href="/orders"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >Orders</a
+            >
+            <a
+              href="/logout"
+              class="text-red-600 hover:text-red-800 font-medium nav-link"
+              >Logout</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-6">
+      {% if cart_items %}
+      <div
+        class="bg-white rounded-2xl shadow-lg p-8 card-hover animate-fadeInUp"
+      >
+        <h2 class="text-3xl font-bold mb-8 text-gray-800 flex items-center">
+          <span class="text-4xl mr-4">🛍️</span>
+          Your Cart ({{ cart_items|length }} items)
+        </h2>
+
+        <div class="space-y-6">
+          {% for item, product in cart_items %}
+          <div
+            class="flex items-center justify-between border-b border-gray-200 pb-6 item-hover p-4"
+            id="cart-item-{{ item.id }}"
+          >
+            <div class="flex items-center space-x-6">
+              <img
+                src="{{ product.image_url }}"
+                class="w-20 h-20 rounded-xl object-cover shadow-md product-image border-2 border-gray-200"
+                alt="{{ product.name }}"
+              />
+              <div>
+                <h3 class="font-semibold text-lg text-gray-800">
+                  {{ product.name }}
+                </h3>
+                <p
+                  class="text-sm text-blue-600 bg-blue-100 px-2 py-1 rounded-lg inline-block mt-1"
+                >
+                  {{ product.category }}
+                </p>
+                <p class="text-xl font-bold text-green-600 mt-2">
+                  ${{ "%.2f"|format(product.price) }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-6">
+              <div class="text-center">
+                <span class="text-gray-600 text-sm">Quantity</span>
+                <div
+                  class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold text-lg min-w-12 text-center mt-1"
+                >
+                  {{ item.quantity }}
+                </div>
+              </div>
+              <div class="text-center">
+                <span class="text-gray-600 text-sm">Subtotal</span>
+                <div class="font-bold text-lg text-gray-800">
+                  ${{ "%.2f"|format(product.price * item.quantity) }}
+                </div>
+              </div>
+              <button
+                onclick="removeFromCart('{{ item.id }}')"
+                class="bg-red-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-red-600 btn-hover remove-btn font-medium"
+                id="remove-btn-{{ item.id }}"
+              >
+                🗑️ Remove
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="mt-8 bg-gray-50 rounded-2xl p-6">
+          <div class="flex justify-between items-center mb-6">
+            <div class="text-3xl font-bold text-gray-800">
+              Total:
+              <span class="text-green-600">${{ "%.2f"|format(total) }}</span>
+            </div>
+            <div class="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg">
+              {{ cart_items|length }} item(s) in cart
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="/chat"
+              class="bg-gray-600 text-white px-8 py-4 rounded-xl hover:bg-gray-700 btn-hover font-semibold text-center"
+            >
+              Continue Shopping
+            </a>
+            <a
+              href="/checkout"
+              class="bg-blue-600 text-white px-8 py-4 rounded-xl hover:bg-blue-700 btn-hover font-semibold text-center"
+            >
+              Proceed to Checkout
+            </a>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div
+        class="bg-white rounded-2xl shadow-lg p-12 text-center card-hover animate-fadeInUp"
+      >
+        <div class="text-8xl mb-6 animate-bounce-slow">🛒</div>
+        <h2 class="text-3xl font-bold mb-4 text-gray-800">
+          Your cart is empty
+        </h2>
+        <p class="text-gray-600 mb-8 text-lg">
+          Start shopping to add items to your cart!
+        </p>
+        <a
+          href="/chat"
+          class="bg-blue-600 text-white px-8 py-4 rounded-xl hover:bg-blue-700 btn-hover font-semibold text-lg inline-block"
+        >
+          🛍️ Start Shopping
+        </a>
+      </div>
+      {% endif %}
+    </div>
+
+    <script>
+      async function removeFromCart(itemId) {
+        // Add loading state
+        const button = document.getElementById(`remove-btn-${itemId}`);
+        const originalText = button.innerHTML;
+        button.innerHTML = "⏳ Removing...";
+        button.disabled = true;
+
+        try {
+          const response = await fetch("/api/cart/remove", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ item_id: parseInt(itemId) }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            const cartItem = document.getElementById(`cart-item-${itemId}`);
+            cartItem.style.animation = "fadeOut 0.5s ease-out";
+
+            setTimeout(() => {
+              location.reload();
+            }, 500);
+          } else {
+            throw new Error(result.message || "Failed to remove item");
+          }
+        } catch (error) {
+          // Restore button state on error
+          button.innerHTML = originalText;
+          button.disabled = false;
+          console.error("Error removing item:", error);
+          alert("Failed to remove item: " + error.message);
+        }
+      }
+
+      // Add fade out animation
+      const style = document.createElement("style");
+      style.textContent = `
+        @keyframes fadeOut {
+          from { opacity: 1; transform: scale(1); }
+          to { opacity: 0; transform: scale(0.8); }
+        }
+        button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+        button:disabled:hover {
+          transform: none;
+          box-shadow: none;
+        }
+      `;
+      document.head.appendChild(style);
+    </script>
+  </body>
+</html>

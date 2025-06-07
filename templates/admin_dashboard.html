@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - E-commerce</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-5px);
+        }
+        60% {
+          transform: translateY(-3px);
+        }
+      }
+
+      @keyframes countUp {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .animate-fadeInUp {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .animate-slideInLeft {
+        animation: slideInLeft 0.5s ease-out;
+      }
+
+      .animate-bounce-slow {
+        animation: bounce 2s infinite;
+      }
+
+      .animate-countUp {
+        animation: countUp 0.8s ease-out;
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .nav-link {
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover {
+        transform: translateY(-2px);
+      }
+
+      .stat-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+        border: 1px solid #e2e8f0;
+      }
+
+      .item-hover {
+        transition: all 0.2s ease;
+      }
+
+      .item-hover:hover {
+        background-color: #f8fafc;
+        transform: translateX(5px);
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50 min-h-screen">
+    <nav class="bg-white shadow-lg border-b border-blue-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-3 animate-fadeInUp">
+            <span class="text-3xl animate-bounce-slow">👨‍💼</span>
+            <h1 class="text-xl font-bold text-gray-800">Admin Dashboard</h1>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a
+              href="/admin/users"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >Users</a
+            >
+            <a
+              href="/admin/orders"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >Orders</a
+            >
+            <a
+              href="/chat"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >Shop</a
+            >
+            <a
+              href="/logout"
+              class="text-red-600 hover:text-red-800 font-medium nav-link"
+              >Logout</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto p-6">
+      <!-- Enhanced Stats Overview -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div
+          class="stat-card rounded-2xl shadow-lg p-6 card-hover animate-fadeInUp"
+        >
+          <div class="flex items-center">
+            <div class="text-4xl mr-4 text-blue-600">👥</div>
+            <div>
+              <p class="text-gray-600 text-sm font-medium">Total Users</p>
+              <p class="text-3xl font-bold text-gray-800 animate-countUp">
+                {{ total_users }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="stat-card rounded-2xl shadow-lg p-6 card-hover animate-fadeInUp"
+          style="animation-delay: 0.1s"
+        >
+          <div class="flex items-center">
+            <div class="text-4xl mr-4 text-green-600">📦</div>
+            <div>
+              <p class="text-gray-600 text-sm font-medium">Total Orders</p>
+              <p class="text-3xl font-bold text-gray-800 animate-countUp">
+                {{ total_orders }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="stat-card rounded-2xl shadow-lg p-6 card-hover animate-fadeInUp"
+          style="animation-delay: 0.2s"
+        >
+          <div class="flex items-center">
+            <div class="text-4xl mr-4 text-yellow-600">💰</div>
+            <div>
+              <p class="text-gray-600 text-sm font-medium">Total Revenue</p>
+              <p class="text-3xl font-bold text-gray-800 animate-countUp">
+                ${{ "%.2f"|format(total_revenue) }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Recent Users & Orders -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recent Users -->
+        <div
+          class="bg-white rounded-2xl shadow-lg p-6 card-hover animate-slideInLeft"
+        >
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+              <span class="text-2xl mr-2">👥</span>
+              Recent Users
+            </h3>
+            <a
+              href="/admin/users"
+              class="text-blue-600 hover:text-blue-800 text-sm font-medium hover:underline transition-colors duration-300"
+            >
+              View All
+            </a>
+          </div>
+          <div class="space-y-2">
+            {% for user in users %}
+            <div
+              class="flex items-center justify-between py-3 px-3 rounded-xl border-b last:border-b-0 item-hover"
+            >
+              <div class="flex items-center space-x-3">
+                <img
+                  src="{{ user.profile_picture }}"
+                  class="w-10 h-10 rounded-full border-2 border-blue-200 shadow-sm"
+                />
+                <div>
+                  <p class="font-semibold text-sm text-gray-800">
+                    {{ user.full_name or user.username }}
+                  </p>
+                  <p class="text-xs text-gray-500">
+                    {{ user.email or 'No email' }}
+                  </p>
+                </div>
+              </div>
+              <div
+                class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg"
+              >
+                {{ user.created_at.strftime('%m/%d/%Y') }}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div
+          class="bg-white rounded-2xl shadow-lg p-6 card-hover animate-slideInLeft"
+          style="animation-delay: 0.1s"
+        >
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+              <span class="text-2xl mr-2">📦</span>
+              Recent Orders
+            </h3>
+            <a
+              href="/admin/orders"
+              class="text-blue-600 hover:text-blue-800 text-sm font-medium hover:underline transition-colors duration-300"
+            >
+              View All
+            </a>
+          </div>
+          <div class="space-y-2">
+            {% for order in orders %}
+            <div
+              class="flex items-center justify-between py-3 px-3 rounded-xl border-b last:border-b-0 item-hover"
+            >
+              <div>
+                <p class="font-semibold text-sm text-gray-800">
+                  #{{ order.order_number }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  {{ order.created_at.strftime('%m/%d/%Y %I:%M %p') }}
+                </p>
+              </div>
+              <div class="text-right">
+                <p class="font-bold text-sm text-gray-800 mb-1">
+                  ${{ "%.2f"|format(order.total_amount) }}
+                </p>
+                <span
+                  class="inline-block px-3 py-1 text-xs rounded-full font-medium {% if order.status == 'Delivered' %}bg-green-100 text-green-800 {% elif order.status == 'Shipped' %}bg-blue-100 text-blue-800 {% elif order.status == 'Confirmed' %}bg-yellow-100 text-yellow-800 {% else %}bg-gray-100 text-gray-800{% endif %}"
+                >
+                  {{ order.status }}
+                </span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

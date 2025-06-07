@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management - Admin</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-5px);
+        }
+        60% {
+          transform: translateY(-3px);
+        }
+      }
+
+      .animate-fadeInUp {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .animate-slideInLeft {
+        animation: slideInLeft 0.5s ease-out;
+      }
+
+      .animate-bounce-slow {
+        animation: bounce 2s infinite;
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .nav-link {
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover {
+        transform: translateY(-2px);
+      }
+
+      .table-row {
+        transition: all 0.3s ease;
+      }
+
+      .table-row:hover {
+        background-color: #f8fafc;
+        transform: scale(1.01);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .privacy-blur {
+        filter: blur(4px);
+        transition: filter 0.3s ease;
+      }
+
+      .privacy-blur:hover {
+        filter: blur(0px);
+      }
+
+      .status-badge {
+        transition: all 0.2s ease;
+      }
+
+      .status-badge:hover {
+        transform: scale(1.1);
+      }
+
+      .user-avatar {
+        transition: all 0.3s ease;
+      }
+
+      .user-avatar:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50 min-h-screen">
+    <nav class="bg-white shadow-lg border-b border-blue-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-3 animate-fadeInUp">
+            <span class="text-3xl animate-bounce-slow">👥</span>
+            <h1 class="text-xl font-bold text-gray-800">User Management</h1>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a
+              href="/admin/dashboard"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >Dashboard</a
+            >
+            <a
+              href="/admin/orders"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >Orders</a
+            >
+            <a
+              href="/logout"
+              class="text-red-600 hover:text-red-800 font-medium nav-link"
+              >Logout</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto p-6">
+      <!-- Privacy Notice -->
+      <div
+        class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg animate-fadeInUp"
+      >
+        <div class="flex items-center">
+          <span class="text-yellow-600 text-xl mr-3">🔒</span>
+          <div>
+            <h3 class="text-sm font-semibold text-yellow-800">
+              Privacy Notice
+            </h3>
+            <p class="text-sm text-yellow-700 mt-1">
+              Sensitive information is blurred for privacy. Hover to view when
+              necessary for administrative purposes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-lg card-hover animate-fadeInUp">
+        <div
+          class="px-8 py-6 border-b border-gray-200 bg-blue-50 rounded-t-2xl"
+        >
+          <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+              <span class="text-3xl mr-3">👤</span>
+              Registered Users ({{ users|length }})
+            </h2>
+            <div class="text-sm text-gray-600 bg-white px-3 py-1 rounded-lg">
+              Total Active: {{ users|selectattr('is_active')|list|length }}
+            </div>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                >
+                  User Profile
+                </th>
+                <th
+                  class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                >
+                  Contact Information
+                </th>
+                <th
+                  class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                >
+                  Account Details
+                </th>
+                <th
+                  class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                >
+                  Activity
+                </th>
+                <th
+                  class="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                >
+                  Orders & Status
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              {% for user in users %}
+              <tr
+                class="table-row animate-slideInLeft"
+                style="animation-delay: {{ loop.index0 * 0.05 }}s"
+              >
+                <td class="px-6 py-5">
+                  <div class="flex items-center">
+                    <img
+                      class="h-12 w-12 rounded-full border-2 border-blue-200 user-avatar"
+                      src="{{ user.profile_picture }}"
+                      alt="User Avatar"
+                    />
+                    <div class="ml-4">
+                      <div class="text-sm font-semibold text-gray-900">
+                        {{ user.full_name or user.username }}
+                      </div>
+                      <div
+                        class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded mt-1"
+                      >
+                        @{{ user.username }}
+                      </div>
+                      {% if user.is_admin %}
+                      <div
+                        class="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded mt-1 inline-block"
+                      >
+                        Admin
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-5">
+                  <div class="space-y-2">
+                    <div class="text-sm text-gray-900 privacy-blur">
+                      📧 {{ user.email or 'No email provided' }}
+                    </div>
+                    <div class="text-sm text-gray-600 privacy-blur">
+                      📱 {{ user.phone or 'No phone provided' }}
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-5">
+                  <div class="space-y-2">
+                    <div class="text-sm text-gray-900">
+                      <span class="text-gray-500">Joined:</span>
+                      <span class="font-medium"
+                        >{{ user.created_at.strftime('%B %d, %Y') }}</span
+                      >
+                    </div>
+                    <div
+                      class="text-xs text-gray-500 bg-blue-50 px-2 py-1 rounded"
+                    >
+                      Member since {{ user.created_at.strftime('%Y') }}
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-5">
+                  <div class="space-y-2">
+                    <div class="text-sm">
+                      <span class="text-gray-500">Last Login:</span>
+                      <div class="font-medium text-gray-900">
+                        {% if user.last_login %} {{
+                        user.last_login.strftime('%m/%d/%Y') }}
+                        <div class="text-xs text-gray-500">
+                          {{ user.last_login.strftime('%I:%M %p') }}
+                        </div>
+                        {% else %}
+                        <span class="text-red-600">Never logged in</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-5">
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <div class="text-sm">
+                        <span class="text-gray-500">Orders:</span>
+                        <span class="font-bold text-lg text-blue-600"
+                          >{{ user.orders|length }}</span
+                        >
+                      </div>
+                      {% if user.orders|length > 0 %}
+                      <div
+                        class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded"
+                      >
+                        Customer
+                      </div>
+                      {% endif %}
+                    </div>
+                    <div>
+                      <span
+                        class="inline-flex px-3 py-2 text-sm font-semibold rounded-full status-badge {% if user.is_active %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}"
+                      >
+                        {% if user.is_active %} ✅ Active {% else %} ❌ Inactive
+                        {% endif %}
+                      </span>
+                    </div>
+                    {% if user.orders|length > 0 %}
+                    <div class="text-xs text-gray-500">
+                      Total Spent:
+                      <span class="font-semibold text-green-600">
+                        ${{
+                        "%.2f"|format(user.orders|sum(attribute='total_amount'))
+                        }}
+                      </span>
+                    </div>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        {% if not users %}
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">👥</div>
+          <h3 class="text-xl font-semibold text-gray-600 mb-2">
+            No Users Found
+          </h3>
+          <p class="text-gray-500">
+            User accounts will appear here when people register.
+          </p>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 card-hover animate-fadeInUp"
+          style="animation-delay: 0.1s"
+        >
+          <div class="flex items-center">
+            <div class="text-3xl mr-4 text-blue-600">👥</div>
+            <div>
+              <p class="text-gray-600 text-sm font-medium">Active Users</p>
+              <p class="text-2xl font-bold text-gray-800">
+                {{ users|selectattr('is_active')|list|length }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 card-hover animate-fadeInUp"
+          style="animation-delay: 0.2s"
+        >
+          <div class="flex items-center">
+            <div class="text-3xl mr-4 text-green-600">🛒</div>
+            <div>
+              <p class="text-gray-600 text-sm font-medium">Customers</p>
+              <p class="text-2xl font-bold text-gray-800">
+                {{ users|selectattr('orders')|list|length }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 card-hover animate-fadeInUp"
+          style="animation-delay: 0.3s"
+        >
+          <div class="flex items-center">
+            <div class="text-3xl mr-4 text-yellow-600">📧</div>
+            <div>
+              <p class="text-gray-600 text-sm font-medium">With Email</p>
+              <p class="text-2xl font-bold text-gray-800">
+                {{ users|selectattr('email')|list|length }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-white rounded-xl shadow-lg p-6 card-hover animate-fadeInUp"
+          style="animation-delay: 0.4s"
+        >
+          <div class="flex items-center">
+            <div class="text-3xl mr-4 text-purple-600">👨‍💼</div>
+            <div>
+              <p class="text-gray-600 text-sm font-medium">Admins</p>
+              <p class="text-2xl font-bold text-gray-800">
+                {{ users|selectattr('is_admin')|list|length }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

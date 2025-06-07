@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Shopping Assistant</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .animate-fadeInUp {
+        animation: fadeInUp 0.5s ease-out;
+      }
+
+      .animate-slideInLeft {
+        animation: slideInLeft 0.5s ease-out;
+      }
+
+      .animate-slideInRight {
+        animation: slideInRight 0.5s ease-out;
+      }
+
+      .animate-pulse-slow {
+        animation: pulse 2s infinite;
+      }
+
+      .nav-shadow {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .chat-shadow {
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .message-hover {
+        transition: all 0.3s ease;
+      }
+
+      .message-hover:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-interactive {
+        transition: all 0.3s ease;
+      }
+
+      .btn-interactive:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .input-focus {
+        transition: all 0.3s ease;
+      }
+
+      .input-focus:focus {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .typing-indicator {
+        display: none;
+      }
+
+      .typing-indicator.show {
+        display: block;
+        animation: fadeInUp 0.3s ease-out;
+      }
+    </style>
+  </head>
+  <body class="bg-blue-50 min-h-screen">
+    <!-- Enhanced Navigation -->
+    <nav class="bg-white nav-shadow border-b border-blue-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-3 animate-fadeInUp">
+            <span class="text-3xl animate-pulse-slow">🤖</span>
+            <h1 class="text-xl font-bold text-gray-800">
+              AI Shopping Assistant
+            </h1>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a
+              href="/dashboard"
+              class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300 hover:underline"
+              >Dashboard</a
+            >
+            <a
+              href="/cart"
+              class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300 hover:underline"
+              id="cart-link"
+              >Cart</a
+            >
+            <a
+              href="/profile"
+              class="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-300 hover:underline"
+              >Profile</a
+            >
+            <span class="text-gray-700 font-medium">{{ username }}</span>
+            <a
+              href="/logout"
+              class="text-red-600 hover:text-red-800 font-medium transition-colors duration-300 hover:underline"
+              >Logout</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-6">
+      <!-- Enhanced Chat Container -->
+      <div class="bg-white rounded-2xl chat-shadow overflow-hidden">
+        <!-- Chat Header -->
+        <div class="bg-blue-600 text-white p-4">
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-xl"
+            >
+              🤖
+            </div>
+            <div>
+              <h2 class="font-semibold">AI Assistant</h2>
+              <p class="text-blue-100 text-sm">Online • Ready to help</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="h-96 overflow-y-auto p-6 bg-gray-50" id="chat-box">
+          <div class="flex justify-center mb-6 animate-fadeInUp">
+            <div
+              class="bg-blue-100 text-blue-800 px-6 py-4 rounded-2xl text-center max-w-md message-hover"
+            >
+              <p class="font-semibold text-lg">
+                👋 Hello! I'm your AI Shopping Assistant
+              </p>
+              <p class="text-sm mt-2">What are you looking for today?</p>
+            </div>
+          </div>
+
+          <!-- Typing Indicator -->
+          <div
+            class="typing-indicator flex justify-start mb-3"
+            id="typing-indicator"
+          >
+            <div
+              class="bg-white border-2 border-blue-200 text-blue-600 px-4 py-2 rounded-2xl max-w-md"
+            >
+              <div class="flex items-center space-x-2">
+                <div class="flex space-x-1">
+                  <div
+                    class="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                  ></div>
+                  <div
+                    class="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                    style="animation-delay: 0.1s"
+                  ></div>
+                  <div
+                    class="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                    style="animation-delay: 0.2s"
+                  ></div>
+                </div>
+                <span class="text-sm">AI is typing...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Input Area -->
+        <div class="border-t border-gray-200 p-6 bg-white">
+          <div class="flex space-x-3">
+            <input
+              type="text"
+              id="user-input"
+              placeholder="Type your message..."
+              class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl input-focus focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              onkeypress="if(event.key==='Enter') sendMessage()"
+            />
+            <button
+              onclick="sendMessage()"
+              class="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 btn-interactive font-medium"
+            >
+              Send
+            </button>
+          </div>
+
+          <!-- Enhanced Quick Buttons -->
+          <div class="mt-4 flex flex-wrap gap-3">
+            <button
+              onclick="sendQuickMessage('show me smartphones')"
+              class="bg-white border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700 px-4 py-2 rounded-xl text-sm btn-interactive"
+            >
+              📱 Smartphones
+            </button>
+            <button
+              onclick="sendQuickMessage('laptops')"
+              class="bg-white border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700 px-4 py-2 rounded-xl text-sm btn-interactive"
+            >
+              💻 Laptops
+            </button>
+            <button
+              onclick="sendQuickMessage('show my cart')"
+              class="bg-white border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700 px-4 py-2 rounded-xl text-sm btn-interactive"
+            >
+              🛒 Cart
+            </button>
+            <button
+              onclick="sendQuickMessage('help me find something')"
+              class="bg-white border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700 px-4 py-2 rounded-xl text-sm btn-interactive"
+            >
+              ❓ Help
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function sendMessage() {
+        const input = document.getElementById("user-input");
+        const message = input.value.trim();
+
+        if (!message) return;
+
+        const chatBox = document.getElementById("chat-box");
+        const typingIndicator = document.getElementById("typing-indicator");
+
+        // Add user message with animation
+        chatBox.innerHTML += `
+            <div class="flex justify-end mb-4 animate-slideInRight">
+                <div class="bg-blue-600 text-white px-4 py-3 rounded-2xl max-w-xs message-hover shadow-lg">
+                    ${message}
+                </div>
+            </div>`;
+
+        input.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Show typing indicator
+        typingIndicator.classList.add("show");
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+          const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: message }),
+          });
+
+          const data = await response.json();
+
+          // Hide typing indicator
+          typingIndicator.classList.remove("show");
+
+          // Add bot response with animation
+          chatBox.innerHTML += `
+                <div class="flex justify-start mb-4 animate-slideInLeft">
+                    <div class="bg-white border-2 border-blue-200 text-blue-800 px-4 py-3 rounded-2xl max-w-md message-hover shadow-lg">
+                        ${data.response}
+                    </div>
+                </div>`;
+
+          // Add products if any
+          if (data.products && data.products.length > 0) {
+            data.products.forEach((p) => {
+              chatBox.innerHTML += `
+                    <div class="bg-white border-2 border-gray-200 rounded-2xl p-5 mb-4 message-hover shadow-lg animate-fadeInUp">
+                        <div class="flex items-start space-x-4">
+                            <img src="${p.image_url}" class="w-20 h-20 rounded-xl object-cover shadow-md" />
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-800 text-lg">${p.name}</h3>
+                                <p class="text-sm text-blue-600 font-medium">${p.category}</p>
+                                <p class="text-sm text-gray-600 mb-3">${p.description}</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xl font-bold text-green-600">$${p.price}</span>
+                                    <button onclick="addToCart('${p.id}')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-blue-700 btn-interactive font-medium">
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+          }
+        } catch (error) {
+          // Hide typing indicator
+          typingIndicator.classList.remove("show");
+
+          chatBox.innerHTML += `
+                <div class="flex justify-start mb-4 animate-slideInLeft">
+                    <div class="bg-red-50 border-2 border-red-200 text-red-800 px-4 py-3 rounded-2xl message-hover shadow-lg">
+                        Sorry, something went wrong. Please try again.
+                    </div>
+                </div>`;
+        }
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      function sendQuickMessage(message) {
+        document.getElementById("user-input").value = message;
+        sendMessage();
+      }
+
+      async function addToCart(productId) {
+        try {
+          const response = await fetch("/api/cart/add", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              product_id: productId,
+              quantity: 1,
+            }),
+          });
+
+          const result = await response.json();
+          const chatBox = document.getElementById("chat-box");
+
+          if (result.success) {
+            chatBox.innerHTML += `
+                    <div class="flex justify-center mb-4 animate-fadeInUp">
+                        <div class="bg-green-100 border-2 border-green-200 text-green-800 px-4 py-2 rounded-2xl text-sm message-hover shadow-lg">
+                            ✅ ${result.message}
+                        </div>
+                    </div>`;
+            loadCartCount(); // Update cart count
+          } else {
+            chatBox.innerHTML += `
+                    <div class="flex justify-center mb-4 animate-fadeInUp">
+                        <div class="bg-red-100 border-2 border-red-200 text-red-800 px-4 py-2 rounded-2xl text-sm message-hover shadow-lg">
+                            ❌ ${result.message || "Failed to add item"}
+                        </div>
+                    </div>`;
+          }
+
+          chatBox.scrollTop = chatBox.scrollHeight;
+        } catch (error) {
+          console.error("Error adding to cart:", error);
+        }
+      }
+
+      // Load cart count
+      async function loadCartCount() {
+        try {
+          const response = await fetch("/api/cart/count");
+          if (response.ok) {
+            const data = await response.json();
+            const cartLink = document.getElementById("cart-link");
+            if (data.count > 0) {
+              cartLink.textContent = `Cart (${data.count})`;
+            }
+          }
+        } catch (error) {
+          console.log("Could not load cart count");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadCartCount);
+    </script>
+  </body>
+</html>

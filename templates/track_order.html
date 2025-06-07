@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Track Order #{{ order.order_number }} - E-commerce</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow border-b">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center space-x-3">
+            <a href="/orders" class="text-2xl">📦</a>
+            <h1 class="text-xl font-bold text-gray-800">
+              Track Order #{{ order.order_number }}
+            </h1>
+          </div>
+          <div class="flex items-center space-x-4">
+            <a href="/dashboard" class="text-blue-600 hover:text-blue-800"
+              >Dashboard</a
+            >
+            <a href="/orders" class="text-blue-600 hover:text-blue-800"
+              >All Orders</a
+            >
+            <a href="/chat" class="text-blue-600 hover:text-blue-800">Shop</a>
+            <a href="/logout" class="text-red-600 hover:text-red-800">Logout</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto p-6">
+      <!-- Order Status Banner -->
+      <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Order #{{ order.order_number }}</h2>
+            <p class="text-gray-600">
+              Placed on {{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+            </p>
+          </div>
+          <div class="text-right">
+            <div class="text-2xl font-bold text-green-600">
+              ${{ "%.2f"|format(order.total_amount) }}
+            </div>
+            <span
+              class="inline-block px-3 py-1 rounded text-sm font-medium {% if order.status == 'Delivered' %}bg-green-100 text-green-800 {% elif order.status == 'Shipped' %}bg-blue-100 text-blue-800 {% elif order.status == 'Confirmed' %}bg-yellow-100 text-yellow-800 {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800 {% else %}bg-gray-100 text-gray-800{% endif %}"
+            >
+              {{ order.status }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Progress -->
+      <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <h3 class="text-lg font-semibold mb-6">Order Progress</h3>
+        <div class="flex items-center justify-between">
+          <!-- Processing -->
+          <div class="flex flex-col items-center">
+            <div
+              class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center mb-2"
+            >
+              <span class="text-sm">✓</span>
+            </div>
+            <div class="text-center">
+              <p class="font-medium text-sm">Processing</p>
+              <p class="text-xs text-gray-500">
+                {{ order.created_at.strftime('%m/%d') }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Confirmed -->
+          <div class="flex flex-col items-center">
+            <div
+              class="w-10 h-10 rounded-full {% if order.status in ['Confirmed', 'Shipped', 'Delivered'] %}bg-green-500 text-white {% else %}bg-gray-300 text-gray-600{% endif %} flex items-center justify-center mb-2"
+            >
+              <span class="text-sm">
+                {% if order.status in ['Confirmed', 'Shipped', 'Delivered']
+                %}✓{% else %}2{% endif %}
+              </span>
+            </div>
+            <div class="text-center">
+              <p class="font-medium text-sm">Confirmed</p>
+              <p class="text-xs text-gray-500">
+                {% if order.status in ['Confirmed', 'Shipped', 'Delivered']
+                %}Done{% else %}Pending{% endif %}
+              </p>
+            </div>
+          </div>
+
+          <!-- Shipped -->
+          <div class="flex flex-col items-center">
+            <div
+              class="w-10 h-10 rounded-full {% if order.status in ['Shipped', 'Delivered'] %}bg-green-500 text-white {% else %}bg-gray-300 text-gray-600{% endif %} flex items-center justify-center mb-2"
+            >
+              <span class="text-sm">
+                {% if order.status in ['Shipped', 'Delivered'] %}✓{% else %}3{%
+                endif %}
+              </span>
+            </div>
+            <div class="text-center">
+              <p class="font-medium text-sm">Shipped</p>
+              <p class="text-xs text-gray-500">
+                {% if order.status in ['Shipped', 'Delivered'] %}In Transit{%
+                else %}Pending{% endif %}
+              </p>
+            </div>
+          </div>
+
+          <!-- Delivered -->
+          <div class="flex flex-col items-center">
+            <div
+              class="w-10 h-10 rounded-full {% if order.status == 'Delivered' %}bg-green-500 text-white {% else %}bg-gray-300 text-gray-600{% endif %} flex items-center justify-center mb-2"
+            >
+              <span class="text-sm">
+                {% if order.status == 'Delivered' %}✓{% else %}4{% endif %}
+              </span>
+            </div>
+            <div class="text-center">
+              <p class="font-medium text-sm">Delivered</p>
+              <p class="text-xs text-gray-500">
+                {% if order.status == 'Delivered' %}Complete{% else %}Pending{%
+                endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Items -->
+      <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <h3 class="text-lg font-semibold mb-4">
+          Order Items ({{ order.items|length }})
+        </h3>
+        <div class="space-y-3">
+          {% for item in order.items %}
+          <div
+            class="flex items-center justify-between py-3 border-b last:border-b-0"
+          >
+            <div class="flex items-center space-x-4">
+              <img
+                src="https://via.placeholder.com/60"
+                class="w-15 h-15 rounded object-cover"
+              />
+              <div>
+                <h4 class="font-medium">{{ item.product_name }}</h4>
+                <p class="text-sm text-gray-600">
+                  Quantity: {{ item.quantity }}
+                </p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="font-bold">${{ "%.2f"|format(item.total) }}</p>
+              <p class="text-sm text-gray-600">
+                ${{ "%.2f"|format(item.price) }} each
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Order Details -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Shipping Information -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Shipping Information</h3>
+          <div class="space-y-3">
+            <div>
+              <p class="text-sm text-gray-600">Shipping Address:</p>
+              <p class="font-medium">{{ order.shipping_address }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Shipping Method:</p>
+              <p class="font-medium">Standard Shipping (FREE)</p>
+            </div>
+            {% if order.status in ['Shipped', 'Delivered'] %}
+            <div>
+              <p class="text-sm text-gray-600">Tracking Number:</p>
+              <p class="font-medium text-blue-600">
+                #TRK{{ order.order_number }}2024
+              </p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Payment Information -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold mb-4">Payment Information</h3>
+          <div class="space-y-3">
+            <div>
+              <p class="text-sm text-gray-600">Payment Method:</p>
+              <p class="font-medium">{{ order.payment_method }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Order Total:</p>
+              <p class="font-medium text-green-600">
+                ${{ "%.2f"|format(order.total_amount) }}
+              </p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Payment Status:</p>
+              <p class="font-medium text-green-600">Paid</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-6 flex flex-wrap gap-4">
+        <a
+          href="/orders"
+          class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
+          >← Back to Orders</a
+        >
+        {% if order.status == 'Delivered' %}
+        <button
+          class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+        >
+          Reorder Items
+        </button>
+        {% endif %}
+        <a
+          href="/chat"
+          class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+          >Continue Shopping</a
+        >
+      </div>
+    </div>
+  </body>
+</html>
