@@ -8,47 +8,193 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <style>
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-5px);
+        }
+        60% {
+          transform: translateY(-3px);
+        }
+      }
+
+      @keyframes moveTruck {
+        0% {
+          transform: translateX(-100px);
+        }
+        100% {
+          transform: translateX(0px);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      .animate-fadeInUp {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .animate-slideInLeft {
+        animation: slideInLeft 0.5s ease-out;
+      }
+
+      .animate-bounce-slow {
+        animation: bounce 2s infinite;
+      }
+
+      .animate-moveTruck {
+        animation: moveTruck 2s ease-in-out;
+      }
+
+      .animate-pulse-slow {
+        animation: pulse 2s infinite;
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+
+      .nav-link {
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn-hover {
+        transition: all 0.3s ease;
+      }
+
+      .btn-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .progress-line {
+        position: relative;
+        background: #e5e7eb;
+        height: 4px;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background: linear-gradient(90deg, #10b981, #34d399);
+        border-radius: 2px;
+        transition: width 1s ease-in-out;
+      }
+    </style>
   </head>
-  <body class="bg-gray-50 min-h-screen">
-    <nav class="bg-white shadow border-b">
+  <body class="bg-blue-50 min-h-screen">
+    <nav class="bg-white shadow-lg border-b border-blue-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
-          <div class="flex items-center space-x-3">
-            <a href="/orders" class="text-2xl">📦</a>
+          <div class="flex items-center space-x-3 animate-fadeInUp">
+            <a
+              href="/orders"
+              class="text-3xl hover:scale-110 transition-transform duration-300 animate-bounce-slow"
+              >📦</a
+            >
             <h1 class="text-xl font-bold text-gray-800">
               Track Order #{{ order.order_number }}
             </h1>
           </div>
-          <div class="flex items-center space-x-4">
-            <a href="/dashboard" class="text-blue-600 hover:text-blue-800"
+          <div class="flex items-center space-x-6">
+            <a
+              href="/dashboard"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
               >Dashboard</a
             >
-            <a href="/orders" class="text-blue-600 hover:text-blue-800"
+            <a
+              href="/orders"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
               >All Orders</a
             >
-            <a href="/chat" class="text-blue-600 hover:text-blue-800">Shop</a>
-            <a href="/logout" class="text-red-600 hover:text-red-800">Logout</a>
+            <a
+              href="/chat"
+              class="text-blue-600 hover:text-blue-800 font-medium nav-link"
+              >Shop</a
+            >
+            <a
+              href="/logout"
+              class="text-red-600 hover:text-red-800 font-medium nav-link"
+              >Logout</a
+            >
           </div>
         </div>
       </div>
     </nav>
 
     <div class="max-w-4xl mx-auto p-6">
-      <!-- Order Status Banner -->
-      <div class="bg-white rounded-lg shadow p-6 mb-6">
-        <div class="flex justify-between items-center mb-4">
-          <div>
-            <h2 class="text-2xl font-bold">Order #{{ order.order_number }}</h2>
-            <p class="text-gray-600">
+      <!-- Enhanced Order Status Banner -->
+      <div
+        class="bg-white rounded-2xl shadow-lg p-8 mb-8 card-hover animate-fadeInUp"
+      >
+        <div
+          class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-6"
+        >
+          <div class="mb-4 lg:mb-0">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">
+              Order #{{ order.order_number }}
+            </h2>
+            <p class="text-gray-600 flex items-center">
+              <span class="mr-2">📅</span>
               Placed on {{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}
             </p>
           </div>
-          <div class="text-right">
-            <div class="text-2xl font-bold text-green-600">
+          <div class="text-left lg:text-right">
+            <div class="text-3xl font-bold text-green-600 mb-3">
               ${{ "%.2f"|format(order.total_amount) }}
             </div>
             <span
-              class="inline-block px-3 py-1 rounded text-sm font-medium {% if order.status == 'Delivered' %}bg-green-100 text-green-800 {% elif order.status == 'Shipped' %}bg-blue-100 text-blue-800 {% elif order.status == 'Confirmed' %}bg-yellow-100 text-yellow-800 {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800 {% else %}bg-gray-100 text-gray-800{% endif %}"
+              class="inline-block px-6 py-3 rounded-2xl text-lg font-semibold shadow-lg {% if order.status == 'Delivered' %}bg-green-100 text-green-800 {% elif order.status == 'Shipped' %}bg-blue-100 text-blue-800 {% elif order.status == 'Confirmed' %}bg-yellow-100 text-yellow-800 {% elif order.status == 'Cancelled' %}bg-red-100 text-red-800 {% else %}bg-gray-100 text-gray-800{% endif %}"
             >
               {{ order.status }}
             </span>
@@ -56,20 +202,36 @@
         </div>
       </div>
 
-      <!-- Order Progress -->
-      <div class="bg-white rounded-lg shadow p-6 mb-6">
-        <h3 class="text-lg font-semibold mb-6">Order Progress</h3>
-        <div class="flex items-center justify-between">
+      <!-- Enhanced Order Progress with Moving Truck -->
+      <div
+        class="bg-white rounded-2xl shadow-lg p-8 mb-8 card-hover animate-slideInLeft"
+      >
+        <h3 class="text-2xl font-bold mb-8 text-gray-800 flex items-center">
+          <span class="text-3xl mr-3">🚛</span>
+          Order Progress
+        </h3>
+
+        <!-- Progress Bar -->
+        <div class="mb-8">
+          <div class="progress-line">
+            <div
+              class="progress-fill"
+              style="width: {% if order.status == 'Processing' %}25%{% elif order.status == 'Confirmed' %}50%{% elif order.status == 'Shipped' %}75%{% elif order.status == 'Delivered' %}100%{% else %}0%{% endif %}"
+            ></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4">
           <!-- Processing -->
           <div class="flex flex-col items-center">
             <div
-              class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center mb-2"
+              class="w-16 h-16 rounded-full bg-green-500 text-white flex items-center justify-center mb-3 shadow-lg animate-pulse-slow"
             >
-              <span class="text-sm">✓</span>
+              <span class="text-xl">✓</span>
             </div>
             <div class="text-center">
-              <p class="font-medium text-sm">Processing</p>
-              <p class="text-xs text-gray-500">
+              <p class="font-semibold text-gray-800">Processing</p>
+              <p class="text-sm text-gray-500">
                 {{ order.created_at.strftime('%m/%d') }}
               </p>
             </div>
@@ -78,16 +240,16 @@
           <!-- Confirmed -->
           <div class="flex flex-col items-center">
             <div
-              class="w-10 h-10 rounded-full {% if order.status in ['Confirmed', 'Shipped', 'Delivered'] %}bg-green-500 text-white {% else %}bg-gray-300 text-gray-600{% endif %} flex items-center justify-center mb-2"
+              class="w-16 h-16 rounded-full {% if order.status in ['Confirmed', 'Shipped', 'Delivered'] %}bg-green-500 text-white shadow-lg{% if order.status == 'Confirmed' %} animate-pulse-slow{% endif %} {% else %}bg-gray-300 text-gray-600{% endif %} flex items-center justify-center mb-3"
             >
-              <span class="text-sm">
+              <span class="text-xl">
                 {% if order.status in ['Confirmed', 'Shipped', 'Delivered']
-                %}✓{% else %}2{% endif %}
+                %}✓{% else %}📋{% endif %}
               </span>
             </div>
             <div class="text-center">
-              <p class="font-medium text-sm">Confirmed</p>
-              <p class="text-xs text-gray-500">
+              <p class="font-semibold text-gray-800">Confirmed</p>
+              <p class="text-sm text-gray-500">
                 {% if order.status in ['Confirmed', 'Shipped', 'Delivered']
                 %}Done{% else %}Pending{% endif %}
               </p>
@@ -97,16 +259,18 @@
           <!-- Shipped -->
           <div class="flex flex-col items-center">
             <div
-              class="w-10 h-10 rounded-full {% if order.status in ['Shipped', 'Delivered'] %}bg-green-500 text-white {% else %}bg-gray-300 text-gray-600{% endif %} flex items-center justify-center mb-2"
+              class="w-16 h-16 rounded-full {% if order.status in ['Shipped', 'Delivered'] %}bg-green-500 text-white shadow-lg{% if order.status == 'Shipped' %} animate-pulse-slow{% endif %} {% else %}bg-gray-300 text-gray-600{% endif %} flex items-center justify-center mb-3"
             >
-              <span class="text-sm">
-                {% if order.status in ['Shipped', 'Delivered'] %}✓{% else %}3{%
-                endif %}
+              <span
+                class="text-xl {% if order.status == 'Shipped' %}animate-moveTruck{% endif %}"
+              >
+                {% if order.status in ['Shipped', 'Delivered'] %}🚚{% else
+                %}📦{% endif %}
               </span>
             </div>
             <div class="text-center">
-              <p class="font-medium text-sm">Shipped</p>
-              <p class="text-xs text-gray-500">
+              <p class="font-semibold text-gray-800">Shipped</p>
+              <p class="text-sm text-gray-500">
                 {% if order.status in ['Shipped', 'Delivered'] %}In Transit{%
                 else %}Pending{% endif %}
               </p>
@@ -116,15 +280,15 @@
           <!-- Delivered -->
           <div class="flex flex-col items-center">
             <div
-              class="w-10 h-10 rounded-full {% if order.status == 'Delivered' %}bg-green-500 text-white {% else %}bg-gray-300 text-gray-600{% endif %} flex items-center justify-center mb-2"
+              class="w-16 h-16 rounded-full {% if order.status == 'Delivered' %}bg-green-500 text-white shadow-lg animate-pulse-slow{% else %}bg-gray-300 text-gray-600{% endif %} flex items-center justify-center mb-3"
             >
-              <span class="text-sm">
-                {% if order.status == 'Delivered' %}✓{% else %}4{% endif %}
+              <span class="text-xl">
+                {% if order.status == 'Delivered' %}🎉{% else %}🏠{% endif %}
               </span>
             </div>
             <div class="text-center">
-              <p class="font-medium text-sm">Delivered</p>
-              <p class="text-xs text-gray-500">
+              <p class="font-semibold text-gray-800">Delivered</p>
+              <p class="text-sm text-gray-500">
                 {% if order.status == 'Delivered' %}Complete{% else %}Pending{%
                 endif %}
               </p>
@@ -133,30 +297,41 @@
         </div>
       </div>
 
-      <!-- Order Items -->
-      <div class="bg-white rounded-lg shadow p-6 mb-6">
-        <h3 class="text-lg font-semibold mb-4">
+      <!-- Enhanced Order Items -->
+      <div
+        class="bg-white rounded-2xl shadow-lg p-8 mb-8 card-hover animate-fadeInUp"
+        style="animation-delay: 0.2s"
+      >
+        <h3 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+          <span class="text-3xl mr-3">📋</span>
           Order Items ({{ order.items|length }})
         </h3>
-        <div class="space-y-3">
+        <div class="space-y-4">
           {% for item in order.items %}
           <div
-            class="flex items-center justify-between py-3 border-b last:border-b-0"
+            class="flex items-center justify-between py-4 border-b border-gray-200 last:border-b-0 hover:bg-gray-50 rounded-xl px-4 transition-colors duration-300"
           >
-            <div class="flex items-center space-x-4">
-              <img
-                src="https://via.placeholder.com/60"
-                class="w-15 h-15 rounded object-cover"
-              />
+            <div class="flex items-center space-x-6">
+              <div
+                class="w-20 h-20 bg-blue-100 rounded-xl flex items-center justify-center"
+              >
+                <span class="text-2xl">📦</span>
+              </div>
               <div>
-                <h4 class="font-medium">{{ item.product_name }}</h4>
-                <p class="text-sm text-gray-600">
+                <h4 class="font-semibold text-lg text-gray-800">
+                  {{ item.product_name }}
+                </h4>
+                <p
+                  class="text-sm text-blue-600 bg-blue-100 px-2 py-1 rounded-lg inline-block"
+                >
                   Quantity: {{ item.quantity }}
                 </p>
               </div>
             </div>
             <div class="text-right">
-              <p class="font-bold">${{ "%.2f"|format(item.total) }}</p>
+              <p class="font-bold text-xl text-green-600">
+                ${{ "%.2f"|format(item.total) }}
+              </p>
               <p class="text-sm text-gray-600">
                 ${{ "%.2f"|format(item.price) }} each
               </p>
@@ -166,24 +341,38 @@
         </div>
       </div>
 
-      <!-- Order Details -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Enhanced Order Details Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         <!-- Shipping Information -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <h3 class="text-lg font-semibold mb-4">Shipping Information</h3>
-          <div class="space-y-3">
-            <div>
-              <p class="text-sm text-gray-600">Shipping Address:</p>
-              <p class="font-medium">{{ order.shipping_address }}</p>
+        <div
+          class="bg-white rounded-2xl shadow-lg p-8 card-hover animate-slideInLeft"
+          style="animation-delay: 0.3s"
+        >
+          <h3 class="text-xl font-bold mb-6 text-gray-800 flex items-center">
+            <span class="text-2xl mr-3">🏠</span>
+            Shipping Information
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+              <p class="text-sm font-medium text-gray-600 mb-2">
+                Shipping Address:
+              </p>
+              <p class="font-medium text-gray-800">
+                {{ order.shipping_address }}
+              </p>
             </div>
-            <div>
-              <p class="text-sm text-gray-600">Shipping Method:</p>
-              <p class="font-medium">Standard Shipping (FREE)</p>
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
+              <p class="text-sm font-medium text-blue-600 mb-2">
+                Shipping Method:
+              </p>
+              <p class="font-medium text-gray-800">Standard Shipping (FREE)</p>
             </div>
             {% if order.status in ['Shipped', 'Delivered'] %}
-            <div>
-              <p class="text-sm text-gray-600">Tracking Number:</p>
-              <p class="font-medium text-blue-600">
+            <div class="bg-green-50 p-4 rounded-xl border border-green-200">
+              <p class="text-sm font-medium text-green-600 mb-2">
+                Tracking Number:
+              </p>
+              <p class="font-medium text-blue-600 font-mono">
                 #TRK{{ order.order_number }}2024
               </p>
             </div>
@@ -192,47 +381,118 @@
         </div>
 
         <!-- Payment Information -->
-        <div class="bg-white rounded-lg shadow p-6">
-          <h3 class="text-lg font-semibold mb-4">Payment Information</h3>
-          <div class="space-y-3">
-            <div>
-              <p class="text-sm text-gray-600">Payment Method:</p>
-              <p class="font-medium">{{ order.payment_method }}</p>
+        <div
+          class="bg-white rounded-2xl shadow-lg p-8 card-hover animate-slideInLeft"
+          style="animation-delay: 0.4s"
+        >
+          <h3 class="text-xl font-bold mb-6 text-gray-800 flex items-center">
+            <span class="text-2xl mr-3">💳</span>
+            Payment Information
+          </h3>
+          <div class="space-y-4">
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+              <p class="text-sm font-medium text-gray-600 mb-2">
+                Payment Method:
+              </p>
+              <p class="font-medium text-gray-800">
+                {{ order.payment_method }}
+              </p>
             </div>
-            <div>
-              <p class="text-sm text-gray-600">Order Total:</p>
-              <p class="font-medium text-green-600">
+            <div class="bg-green-50 p-4 rounded-xl border border-green-200">
+              <p class="text-sm font-medium text-green-600 mb-2">
+                Order Total:
+              </p>
+              <p class="font-bold text-2xl text-green-600">
                 ${{ "%.2f"|format(order.total_amount) }}
               </p>
             </div>
-            <div>
-              <p class="text-sm text-gray-600">Payment Status:</p>
-              <p class="font-medium text-green-600">Paid</p>
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
+              <p class="text-sm font-medium text-blue-600 mb-2">
+                Payment Status:
+              </p>
+              <p class="font-medium text-green-600">✅ Paid</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="mt-6 flex flex-wrap gap-4">
+      <!-- Enhanced Action Buttons -->
+      <div
+        class="flex flex-wrap gap-4 animate-fadeInUp"
+        style="animation-delay: 0.5s"
+      >
         <a
           href="/orders"
-          class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
-          >← Back to Orders</a
+          class="bg-gray-600 text-white px-8 py-4 rounded-xl hover:bg-gray-700 btn-hover font-semibold"
         >
+          ← Back to Orders
+        </a>
         {% if order.status == 'Delivered' %}
         <button
-          class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+          onclick="reorderItems('{{ order._id }}')"
+          class="bg-green-600 text-white px-8 py-4 rounded-xl hover:bg-green-700 btn-hover font-semibold"
+          id="reorder-btn"
         >
-          Reorder Items
+          🔄 Reorder Items
         </button>
         {% endif %}
         <a
           href="/chat"
-          class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-          >Continue Shopping</a
+          class="bg-blue-600 text-white px-8 py-4 rounded-xl hover:bg-blue-700 btn-hover font-semibold"
         >
+          🛍️ Continue Shopping
+        </a>
       </div>
     </div>
+
+    <script>
+      // Animate progress on page load
+      window.addEventListener("load", function () {
+        const progressFill = document.querySelector(".progress-fill");
+        if (progressFill) {
+          progressFill.style.transition = "width 2s ease-in-out";
+        }
+      });
+
+      async function reorderItems(orderId) {
+        const button = document.getElementById("reorder-btn");
+        const originalText = button.innerHTML;
+
+        button.innerHTML = "⏳ Adding to Cart...";
+        button.disabled = true;
+
+        try {
+          const response = await fetch("/api/reorder", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              order_id: orderId,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            button.innerHTML = "✅ Added to Cart!";
+            button.className =
+              "bg-green-600 text-white px-8 py-4 rounded-xl font-semibold";
+
+            setTimeout(() => {
+              if (confirm("Items added to cart! View cart now?")) {
+                window.location.href = "/cart";
+              }
+            }, 1500);
+          } else {
+            throw new Error(result.message || "Failed to reorder");
+          }
+        } catch (error) {
+          button.innerHTML = originalText;
+          button.disabled = false;
+          alert("Failed to reorder: " + error.message);
+        }
+      }
+    </script>
   </body>
 </html>
