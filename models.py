@@ -1,5 +1,7 @@
-from pymongo import MongoClient
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from pymongo import MongoClient
+from bson import ObjectId
 from datetime import datetime
 import uuid
 from bson.objectid import ObjectId
@@ -15,101 +17,236 @@ products_collection = db['products']
 orders_collection = db['orders']
 cart_collection = db['cart_items']
 
-class User:
-    def __init__(self, data=None):
-        if data:
-            self._id = data.get('_id')
-            self.username = data.get('username')
-            self.password = data.get('password')
-            self.email = data.get('email')
-            self.full_name = data.get('full_name')
-            self.phone = data.get('phone')
-            self.address = data.get('address')
-            self.city = data.get('city')
-            self.state = data.get('state')
-            self.zip_code = data.get('zip_code')
-            self.date_of_birth = data.get('date_of_birth')
-            self.created_at = data.get('created_at', datetime.utcnow())
-            self.last_login = data.get('last_login')
-            self.is_active = data.get('is_active', True)
-            self.profile_picture = data.get('profile_picture', 'https://via.placeholder.com/150')
-    
+class User(UserMixin):
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        self.email = ''
+        self.full_name = ''
+        self.phone = ''
+        self.created_at = datetime.utcnow()
+        self.last_login = None
+        self.address = ''
+        self.city = ''
+        self.state = ''
+        self.zip_code = ''
+        self.date_of_birth = None
+        self._id = None
+
+    # Flask-Login required methods
     def get_id(self):
-        return str(self._id)
-    
+        """Return the user ID as a string"""
+        return str(self._id) if self._id else None
+
+    @property
     def is_authenticated(self):
+        """Return True if the user is authenticated"""
         return True
-    
+
+    @property
+    def is_active(self):
+        """Return True if the user is active"""
+        return True
+
+    @property
     def is_anonymous(self):
+        """Return False as this is not an anonymous user"""
         return False
-    
-    @staticmethod
-    def create_user(username, password, email=None, full_name=None, phone=None):
-        user_data = {
-            'username': username,
-            'password': generate_password_hash(password),
-            'email': email,
-            'full_name': full_name,
-            'phone': phone,
-            'created_at': datetime.utcnow(),
-            'is_active': True,
-            'profile_picture': 'https://via.placeholder.com/150'
-        }
-        result = users_collection.insert_one(user_data)
-        user_data['_id'] = result.inserted_id
-        return User(user_data)
-    
-    @staticmethod
-    def find_by_username(username):
-        user_data = users_collection.find_one({'username': username})
-        return User(user_data) if user_data else None
-    
-    @staticmethod
-    def find_by_id(user_id):
+
+    def update_last_login(self):
+        """Update the last login timestamp"""
         try:
-            # Try to convert to ObjectId
-            if isinstance(user_id, str) and len(user_id) == 24:
-                object_id = ObjectId(user_id)
-            elif isinstance(user_id, ObjectId):
-                object_id = user_id
-            else:
-                # Invalid ID format, return None
-                return None
-                
-            user_data = users_collection.find_one({'_id': object_id})
-            return User(user_data) if user_data else None
-        except (InvalidId, TypeError):
-            # If ObjectId conversion fails, return None
-            return None
-    
+            self.last_login = datetime.utcnow()
+            if self._id:
+                users_collection.update_one(
+                    {'_id': self._id},
+                    {'$set': {'last_login': self.last_login}}
+                )
+                print(f"Updated last login for user {self.username}")
+                return True
+        except Exception as e:
+            print(f"Error updating last login: {str(e)}")
+            return False
+
     @staticmethod
     def get_all_users():
-        users_data = users_collection.find().sort('created_at', -1)
-        return [User(user) for user in users_data]
-    
-    def update_profile(self, **kwargs):
-        update_data = {k: v for k, v in kwargs.items() if v is not None}
-        if update_data:
-            users_collection.update_one({'_id': self._id}, {'$set': update_data})
-            for key, value in update_data.items():
-                setattr(self, key, value)
-    
-    def update_last_login(self):
-        self.last_login = datetime.utcnow()
-        users_collection.update_one({'_id': self._id}, {'$set': {'last_login': self.last_login}})
+        """Get all users (admin only)"""
+        try:
+            users_data = list(users_collection.find())
+            return [User.from_dict(user) for user in users_data]
+        except Exception as e:
+            print(f"Error getting all users: {str(e)}")
+            return []
+
+    @staticmethod
+    def find_by_id(user_id):
+        """Find user by ID"""
+        try:
+            print(f"=== Finding user by ID: {user_id} ===")
+            if isinstance(user_id, str):
+                if len(user_id) != 24:  # MongoDB ObjectId should be 24 characters
+                    print(f"Invalid ObjectId length: {len(user_id)}")
+                    return None
+                user_id = ObjectId(user_id)
+            
+            user_data = users_collection.find_one({'_id': user_id})
+            print(f"User data found: {user_data is not None}")
+            
+            if user_data:
+                user = User.from_dict(user_data)
+                print(f"User object created: {user.username if user else 'None'}")
+                return user
+            return None
+        except Exception as e:
+            print(f"Error finding user by ID {user_id}: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return None
+
+    @staticmethod
+    def find_by_username(username):
+        """Find user by username"""
+        try:
+            print(f"=== Finding user by username: {username} ===")
+            user_data = users_collection.find_one({'username': username})
+            print(f"User data found: {user_data is not None}")
+            
+            if user_data:
+                user = User.from_dict(user_data)
+                print(f"User object created: {user.username if user else 'None'}")
+                return user
+            return None
+        except Exception as e:
+            print(f"Error finding user by username {username}: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return None
+
+    @staticmethod
+    def create_user(username, password, email='', full_name='', phone=''):
+        """Create a new user"""
+        try:
+            hashed_password = generate_password_hash(password)
+            user_data = {
+                'username': username,
+                'password': hashed_password,
+                'email': email,
+                'full_name': full_name,
+                'phone': phone,
+                'created_at': datetime.utcnow(),
+                'last_login': None,
+                'address': '',
+                'city': '',
+                'state': '',
+                'zip_code': '',
+                'date_of_birth': None
+            }
+            
+            result = users_collection.insert_one(user_data)
+            user_data['_id'] = result.inserted_id
+            return User.from_dict(user_data)
+        except Exception as e:
+            print(f"Error creating user: {str(e)}")
+            return None
+
+    @staticmethod
+    def from_dict(data):
+        """Create User object from dictionary"""
+        try:
+            if not data:
+                return None
+            
+            print(f"=== Creating user from dict ===")
+            print(f"Username: {data.get('username')}")
+            print(f"Has _id: {'_id' in data}")
+            
+            user = User(data['username'], '')  # Password will be set from data
+            user._id = data['_id']
+            user.password = data['password']
+            user.email = data.get('email', '')
+            user.full_name = data.get('full_name', '')
+            user.phone = data.get('phone', '')
+            user.created_at = data.get('created_at', datetime.utcnow())
+            user.last_login = data.get('last_login')
+            user.address = data.get('address', '')
+            user.city = data.get('city', '')
+            user.state = data.get('state', '')
+            user.zip_code = data.get('zip_code', '')
+            user.date_of_birth = data.get('date_of_birth')
+            
+            print(f"User created successfully: {user.username}")
+            print(f"User ID: {user.get_id()}")
+            
+            return user
+        except Exception as e:
+            print(f"Error creating user from dict: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return None
 
 class Product:
-    def __init__(self, data=None):
-        if data:
-            self._id = data.get('_id')
-            self.name = data.get('name')
-            self.category = data.get('category')
-            self.price = data.get('price')
-            self.description = data.get('description')
-            self.image_url = data.get('image_url')
-            self.stock = data.get('stock', 100)
-            self.created_at = data.get('created_at', datetime.utcnow())
-    
+    def __init__(self, name, category, price, description, image_url, stock=100):
+        self.name = name
+        self.category = category
+        self.price = price
+        self.description = description
+        self.image_url = image_url
+        self.stock = stock
+        self._id = None
+
+    @staticmethod
+    def get_all():
+        """Get all products"""
+        try:
+            products_data = products_collection.find()
+            return [Product.from_dict(product) for product in products_data]
+        except Exception as e:
+            print(f"Error getting all products: {str(e)}")
+            return []
+
+    @staticmethod
+    def find_by_category(category):
+        """Find products by category"""
+        try:
+            products_data = products_collection.find({'category': {'$regex': category, '$options': 'i'}})
+            return [Product.from_dict(product) for product in products_data]
+        except Exception as e:
+            print(f"Error finding products by category {category}: {str(e)}")
+            return []
+
+    @staticmethod
+    def search(query):
+        """Search products by name, category, or description"""
+        try:
+            filter_query = {
+                '$or': [
+                    {'name': {'$regex': query, '$options': 'i'}},
+                    {'category': {'$regex': query, '$options': 'i'}},
+                    {'description': {'$regex': query, '$options': 'i'}}
+                ]
+            }
+            products_data = products_collection.find(filter_query)
+            return [Product.from_dict(product) for product in products_data]
+        except Exception as e:
+            print(f"Error searching products with query '{query}': {str(e)}")
+            return []
+
+    @staticmethod
+    def find_by_price_range(min_price, max_price):
+        """Find products within price range"""
+        try:
+            filter_query = {
+                'price': {
+                    '$gte': min_price,
+                    '$lte': max_price
+                }
+            }
+            products_data = products_collection.find(filter_query)
+            return [Product.from_dict(product) for product in products_data]
+        except Exception as e:
+            print(f"Error finding products in price range ${min_price}-${max_price}: {str(e)}")
+            return []
+
     @staticmethod
     def create_product(name, category, price, description, image_url):
         product_data = {
@@ -123,7 +260,7 @@ class Product:
         }
         result = products_collection.insert_one(product_data)
         product_data['_id'] = result.inserted_id
-        return Product(product_data)
+        return Product.from_dict(product_data)
     
     @staticmethod
     def search_products(query=None, max_price=None, min_price=None, limit=8):
@@ -146,26 +283,68 @@ class Product:
                 filter_query['price'] = {'$gte': min_price}
         
         products_data = products_collection.find(filter_query).limit(limit)
-        return [Product(product) for product in products_data]
+        return [Product.from_dict(product) for product in products_data]
     
     @staticmethod
     def find_by_id(product_id):
+        """Find product by ID"""
         try:
-            if isinstance(product_id, str) and len(product_id) == 24:
-                object_id = ObjectId(product_id)
-            elif isinstance(product_id, ObjectId):
-                object_id = product_id
-            else:
-                return None
-                
-            product_data = products_collection.find_one({'_id': object_id})
-            return Product(product_data) if product_data else None
-        except (InvalidId, TypeError):
+            print(f"=== Finding product by ID: {product_id} ===")
+            print(f"Product ID type: {type(product_id)}")
+            
+            # Handle string ObjectId conversion
+            if isinstance(product_id, str):
+                if len(product_id) != 24:  # MongoDB ObjectId should be 24 characters
+                    print(f"Invalid ObjectId length: {len(product_id)}")
+                    return None
+                try:
+                    product_id = ObjectId(product_id)
+                    print(f"Converted to ObjectId: {product_id}")
+                except Exception as e:
+                    print(f"Failed to convert to ObjectId: {str(e)}")
+                    return None
+            
+            product_data = products_collection.find_one({'_id': product_id})
+            print(f"Product data found: {product_data is not None}")
+            
+            if product_data:
+                print(f"Product name: {product_data.get('name')}")
+                return Product.from_dict(product_data)
             return None
-    
+        except Exception as e:
+            print(f"Error finding product by ID {product_id}: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return None
+
     @staticmethod
-    def get_categories():
-        return products_collection.distinct('category')
+    def from_dict(data):
+        """Create Product object from dictionary"""
+        try:
+            if not data:
+                return None
+            
+            print(f"=== Creating product from dict ===")
+            print(f"Product name: {data.get('name')}")
+            print(f"Has _id: {'_id' in data}")
+            
+            product = Product(
+                data['name'],
+                data['category'],
+                data['price'],
+                data['description'],
+                data['image_url'],
+                data.get('stock', 100)
+            )
+            product._id = data['_id']
+            
+            print(f"Product created successfully: {product.name}")
+            return product
+        except Exception as e:
+            print(f"Error creating product from dict: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return None
 
 class Order:
     def __init__(self, data=None):
@@ -363,37 +542,56 @@ class CartItem:
 
 # Initialize database with sample data
 def initialize_database():
-    # Check if admin user exists
-    admin_user = users_collection.find_one({'username': 'admin'})
-    if not admin_user:
-        User.create_user('admin', 'admin123', 'admin@example.com', 'Administrator')
-    
-    # Check if products exist
-    if products_collection.count_documents({}) == 0:
-        products_data = [
-            # Electronics - Smartphones
-            {'name': 'iPhone 15 Pro Max', 'category': 'Electronics', 'price': 1199.99, 'description': 'Latest iPhone with A17 Pro chip, titanium design, and advanced camera system'},
-            {'name': 'Samsung Galaxy S24 Ultra', 'category': 'Electronics', 'price': 1299.99, 'description': 'Premium Android phone with S Pen, 200MP camera, and AI features'},
-            {'name': 'Google Pixel 8 Pro', 'category': 'Electronics', 'price': 999.99, 'description': 'Google\'s flagship with advanced AI photography and pure Android experience'},
+    """Initialize database with sample data if empty"""
+    try:
+        # Check if products exist
+        if products_collection.count_documents({}) == 0:
+            print("No products found. Loading sample products from JSON...")
+            import json
+            import os
             
-            # Books
-            {'name': 'The Seven Husbands of Evelyn Hugo', 'category': 'Books', 'price': 16.99, 'description': 'Captivating novel about a reclusive Hollywood icon\'s life story'},
-            {'name': 'Atomic Habits', 'category': 'Books', 'price': 17.99, 'description': 'Proven way to build good habits and break bad ones by James Clear'},
-            
-            # Fashion
-            {'name': 'Levi\'s 501 Original Jeans', 'category': 'Fashion', 'price': 89.99, 'description': 'Classic straight-leg jeans with authentic fits and vintage details'},
-            {'name': 'Nike Air Force 1', 'category': 'Fashion', 'price': 110.99, 'description': 'Iconic basketball shoe with leather upper and air cushioning'},
-            
-            # Gaming
-            {'name': 'PlayStation 5 Console', 'category': 'Gaming', 'price': 499.99, 'description': 'Next-gen gaming console with 4K gaming and ray tracing'},
-            {'name': 'Xbox Series X', 'category': 'Gaming', 'price': 499.99, 'description': 'Most powerful Xbox with 4K gaming at 60fps'},
-        ]
+            # Try to load from JSON file
+            json_file_path = os.path.join(os.path.dirname(__file__), 'mongodb_products.json')
+            if os.path.exists(json_file_path):
+                with open(json_file_path, 'r') as f:
+                    products_data = json.load(f)
+                
+                # Insert products
+                if products_data:
+                    products_collection.insert_many(products_data)
+                    print(f"Loaded {len(products_data)} products from JSON file")
+            else:
+                print("JSON file not found, creating basic sample products...")
+                # Create basic sample products if JSON file doesn't exist
+                sample_products = [
+                    {
+                        "name": "Sample iPhone",
+                        "category": "Electronics", 
+                        "price": 999.99,
+                        "description": "Sample smartphone",
+                        "image_url": "https://via.placeholder.com/150",
+                        "stock": 50
+                    },
+                    {
+                        "name": "Sample Laptop",
+                        "category": "Electronics",
+                        "price": 1299.99, 
+                        "description": "Sample laptop computer",
+                        "image_url": "https://via.placeholder.com/150",
+                        "stock": 30
+                    }
+                ]
+                products_collection.insert_many(sample_products)
+                print(f"Created {len(sample_products)} sample products")
         
-        for product_data in products_data:
-            Product.create_product(
-                product_data['name'],
-                product_data['category'],
-                product_data['price'],
-                product_data['description'],
-                'https://via.placeholder.com/150'
-            )
+        # Check if users exist
+        if users_collection.count_documents({}) == 0:
+            print("No users found. Creating admin user...")
+            admin_user = User.create_user('admin', 'admin123', 'admin@store.com', 'Administrator', '555-0000')
+            if admin_user:
+                print("Admin user created successfully")
+        
+        print("Database initialization completed")
+        
+    except Exception as e:
+        print(f"Error initializing database: {str(e)}")

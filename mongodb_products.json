@@ -1,0 +1,810 @@
+[
+  {
+    "name": "Samsung Galaxy S24 Ultra",
+    "category": "Electronics",
+    "price": 1299.99,
+    "description": "Premium Android smartphone with S Pen and 200MP camera",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 85
+  },
+  {
+    "name": "iPhone 15 Pro Max",
+    "category": "Electronics",
+    "price": 1199.99,
+    "description": "Latest iPhone with titanium design and A17 Pro chip",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 92
+  },
+  {
+    "name": "MacBook Pro 14-inch",
+    "category": "Electronics",
+    "price": 1999.99,
+    "description": "M3 chip laptop with Liquid Retina XDR display",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 45
+  },
+  {
+    "name": "Dell XPS 13",
+    "category": "Electronics",
+    "price": 1299.99,
+    "description": "Ultra-portable laptop with Intel Core i7 processor",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Sony WH-1000XM5",
+    "category": "Electronics",
+    "price": 399.99,
+    "description": "Premium noise-canceling wireless headphones",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 123
+  },
+  {
+    "name": "Nike Air Max 270",
+    "category": "Footwear",
+    "price": 149.99,
+    "description": "Lifestyle sneakers with Max Air unit for comfort",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Adidas Ultraboost 22",
+    "category": "Footwear",
+    "price": 179.99,
+    "description": "High-performance running shoes with Boost technology",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 76
+  },
+  {
+    "name": "Converse Chuck Taylor All Star",
+    "category": "Footwear",
+    "price": 59.99,
+    "description": "Classic canvas sneakers in high-top design",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Levi's 501 Original Jeans",
+    "category": "Clothing",
+    "price": 69.99,
+    "description": "Classic straight-leg denim jeans in vintage wash",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 156
+  },
+  {
+    "name": "Uniqlo Heattech Long Sleeve T-Shirt",
+    "category": "Clothing",
+    "price": 19.99,
+    "description": "Thermal underwear with moisture-wicking technology",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 298
+  },
+  {
+    "name": "Patagonia Better Sweater Fleece Jacket",
+    "category": "Clothing",
+    "price": 99.99,
+    "description": "Sustainable fleece jacket made from recycled polyester",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 87
+  },
+  {
+    "name": "The Great Gatsby",
+    "category": "Books",
+    "price": 12.99,
+    "description": "Classic American novel by F. Scott Fitzgerald",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 567
+  },
+  {
+    "name": "Atomic Habits",
+    "category": "Books",
+    "price": 16.99,
+    "description": "Self-help book about building good habits by James Clear",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Dune",
+    "category": "Books",
+    "price": 14.99,
+    "description": "Science fiction epic by Frank Herbert",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 189
+  },
+  {
+    "name": "IKEA BILLY Bookcase",
+    "category": "Furniture",
+    "price": 59.99,
+    "description": "Classic white bookcase with adjustable shelves",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 45
+  },
+  {
+    "name": "Herman Miller Aeron Chair",
+    "category": "Furniture",
+    "price": 1395.00,
+    "description": "Ergonomic office chair with breathable mesh design",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 23
+  },
+  {
+    "name": "West Elm Mid-Century Dining Table",
+    "category": "Furniture",
+    "price": 799.99,
+    "description": "Walnut wood dining table with modern design",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 12
+  },
+  {
+    "name": "Instant Pot Duo 7-in-1",
+    "category": "Kitchen",
+    "price": 89.99,
+    "description": "Multi-functional pressure cooker and slow cooker",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 167
+  },
+  {
+    "name": "KitchenAid Stand Mixer",
+    "category": "Kitchen",
+    "price": 379.99,
+    "description": "Professional-grade stand mixer in classic design",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Nespresso Vertuo Coffee Maker",
+    "category": "Kitchen",
+    "price": 199.99,
+    "description": "Single-serve coffee machine with milk frother",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 78
+  },
+  {
+    "name": "Wilson Tennis Racket Pro Staff",
+    "category": "Sports",
+    "price": 229.99,
+    "description": "Professional tennis racket used by tour players",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 56
+  },
+  {
+    "name": "Spalding NBA Basketball",
+    "category": "Sports",
+    "price": 29.99,
+    "description": "Official size basketball with indoor/outdoor grip",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 134
+  },
+  {
+    "name": "Yoga Mat Premium 6mm",
+    "category": "Sports",
+    "price": 49.99,
+    "description": "Non-slip yoga mat with carrying strap",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 198
+  },
+  {
+    "name": "LEGO Creator Expert Taj Mahal",
+    "category": "Toys",
+    "price": 369.99,
+    "description": "Detailed LEGO model of the famous monument",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 34
+  },
+  {
+    "name": "Barbie Dreamhouse Playset",
+    "category": "Toys",
+    "price": 199.99,
+    "description": "Three-story dollhouse with furniture and accessories",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Hot Wheels Track Builder Mega Set",
+    "category": "Toys",
+    "price": 79.99,
+    "description": "Customizable race track with loops and curves",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Fenty Beauty Gloss Bomb",
+    "category": "Beauty",
+    "price": 19.00,
+    "description": "Universal lip luminizer with non-sticky formula",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 456
+  },
+  {
+    "name": "The Ordinary Niacinamide Serum",
+    "category": "Beauty",
+    "price": 7.90,
+    "description": "Skincare serum for blemish-prone skin",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 789
+  },
+  {
+    "name": "Urban Decay Naked Eyeshadow Palette",
+    "category": "Beauty",
+    "price": 54.00,
+    "description": "12-shade eyeshadow palette in neutral tones",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 123
+  },
+  {
+    "name": "Honda Civic Floor Mats",
+    "category": "Automotive",
+    "price": 89.99,
+    "description": "All-weather floor mats for Honda Civic 2020-2024",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 45
+  },
+  {
+    "name": "Bosch Spark Plugs Set",
+    "category": "Automotive",
+    "price": 39.99,
+    "description": "High-performance spark plugs for most vehicles",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Michelin Pilot Sport Tires",
+    "category": "Automotive",
+    "price": 299.99,
+    "description": "High-performance tires for sports cars",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Organic Quinoa 2lb Bag",
+    "category": "Food",
+    "price": 12.99,
+    "description": "Certified organic tri-color quinoa",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 345
+  },
+  {
+    "name": "Manuka Honey UMF 15+",
+    "category": "Food",
+    "price": 49.99,
+    "description": "Premium New Zealand Manuka honey",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 123
+  },
+  {
+    "name": "Blue Diamond Almond Milk",
+    "category": "Food",
+    "price": 4.99,
+    "description": "Unsweetened vanilla almond milk",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 567
+  },
+  {
+    "name": "Nature Made Vitamin D3",
+    "category": "Health",
+    "price": 16.99,
+    "description": "2000 IU Vitamin D3 supplements, 100 tablets",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Optimum Nutrition Whey Protein",
+    "category": "Health",
+    "price": 59.99,
+    "description": "Gold Standard 100% Whey protein powder",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Fitbit Charge 5",
+    "category": "Health",
+    "price": 179.99,
+    "description": "Advanced fitness tracker with heart rate monitor",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 145
+  },
+  {
+    "name": "Rolex Submariner Watch",
+    "category": "Jewelry",
+    "price": 8950.00,
+    "description": "Luxury Swiss diving watch in stainless steel",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 3
+  },
+  {
+    "name": "Tiffany & Co. Silver Necklace",
+    "category": "Jewelry",
+    "price": 295.00,
+    "description": "Sterling silver heart pendant necklace",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 23
+  },
+  {
+    "name": "Diamond Stud Earrings 1ct",
+    "category": "Jewelry",
+    "price": 1299.99,
+    "description": "Round brilliant cut diamond earrings",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 12
+  },
+  {
+    "name": "Canon EOS R5 Camera",
+    "category": "Photography",
+    "price": 3899.99,
+    "description": "Professional mirrorless camera with 45MP sensor",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 23
+  },
+  {
+    "name": "Sony 24-70mm f/2.8 Lens",
+    "category": "Photography",
+    "price": 2199.99,
+    "description": "Professional zoom lens for Sony cameras",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 34
+  },
+  {
+    "name": "Manfrotto Carbon Fiber Tripod",
+    "category": "Photography",
+    "price": 349.99,
+    "description": "Lightweight tripod for professional photography",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Nintendo Switch OLED",
+    "category": "Gaming",
+    "price": 349.99,
+    "description": "Gaming console with 7-inch OLED screen",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "PlayStation 5",
+    "category": "Gaming",
+    "price": 499.99,
+    "description": "Next-gen gaming console with 4K graphics",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 45
+  },
+  {
+    "name": "Xbox Series X",
+    "category": "Gaming",
+    "price": 499.99,
+    "description": "Most powerful Xbox console ever made",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Milwaukee M18 Drill Set",
+    "category": "Tools",
+    "price": 199.99,
+    "description": "Cordless drill driver with 2 batteries",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 78
+  },
+  {
+    "name": "DeWalt Circular Saw",
+    "category": "Tools",
+    "price": 159.99,
+    "description": "7-1/4 inch circular saw with electric brake",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 56
+  },
+  {
+    "name": "Craftsman Tool Set 230-Piece",
+    "category": "Tools",
+    "price": 179.99,
+    "description": "Complete mechanic's tool set with case",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 34
+  },
+  {
+    "name": "Tesla Model Y All-Season Tires",
+    "category": "Electric Vehicle",
+    "price": 899.99,
+    "description": "OEM replacement tires for Tesla Model Y",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 23
+  },
+  {
+    "name": "ChargePoint Home Flex Charger",
+    "category": "Electric Vehicle",
+    "price": 699.99,
+    "description": "Level 2 EV charger for home installation",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 45
+  },
+  {
+    "name": "Rivian R1T Floor Liners",
+    "category": "Electric Vehicle",
+    "price": 199.99,
+    "description": "All-weather floor protection for Rivian pickup",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 12
+  },
+  {
+    "name": "Yeti Rambler 20oz Tumbler",
+    "category": "Outdoor",
+    "price": 34.99,
+    "description": "Insulated stainless steel travel mug",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Patagonia Houdini Jacket",
+    "category": "Outdoor",
+    "price": 99.99,
+    "description": "Ultra-lightweight windbreaker for hiking",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Coleman 4-Person Tent",
+    "category": "Outdoor",
+    "price": 129.99,
+    "description": "Dome tent with easy setup for camping",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Burrow Nomad Sectional Sofa",
+    "category": "Home Decor",
+    "price": 1895.00,
+    "description": "Modular sectional sofa in performance fabric",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 15
+  },
+  {
+    "name": "CB2 Acrylic Coffee Table",
+    "category": "Home Decor",
+    "price": 799.99,
+    "description": "Modern clear acrylic coffee table",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 23
+  },
+  {
+    "name": "Anthropologie Moroccan Rug",
+    "category": "Home Decor",
+    "price": 299.99,
+    "description": "Hand-tufted wool rug in bohemian style",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 34
+  },
+  {
+    "name": "Fender Player Stratocaster",
+    "category": "Musical Instruments",
+    "price": 829.99,
+    "description": "Electric guitar with maple neck and alder body",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 45
+  },
+  {
+    "name": "Yamaha P-125 Digital Piano",
+    "category": "Musical Instruments",
+    "price": 699.99,
+    "description": "88-key weighted digital piano with speaker system",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 23
+  },
+  {
+    "name": "Audio-Technica AT2020 Microphone",
+    "category": "Musical Instruments",
+    "price": 149.99,
+    "description": "Studio condenser microphone for recording",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Peloton Bike+",
+    "category": "Fitness",
+    "price": 2495.00,
+    "description": "Indoor cycling bike with rotating touchscreen",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 12
+  },
+  {
+    "name": "Bowflex SelectTech Dumbbells",
+    "category": "Fitness",
+    "price": 429.99,
+    "description": "Adjustable dumbbells 5-52.5 lbs per dumbbell",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 34
+  },
+  {
+    "name": "TRX Suspension Trainer",
+    "category": "Fitness",
+    "price": 179.99,
+    "description": "Bodyweight training system with straps",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Purina Pro Plan Dog Food",
+    "category": "Pet Supplies",
+    "price": 59.99,
+    "description": "Adult dry dog food with real chicken",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "KONG Classic Dog Toy",
+    "category": "Pet Supplies",
+    "price": 12.99,
+    "description": "Durable rubber toy for dogs of all sizes",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 456
+  },
+  {
+    "name": "Petmate Cat Litter Box",
+    "category": "Pet Supplies",
+    "price": 24.99,
+    "description": "Large covered litter box with door",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 123
+  },
+  {
+    "name": "Huggies Diapers Size 3",
+    "category": "Baby Products",
+    "price": 49.99,
+    "description": "Ultra-soft disposable diapers 156 count",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Baby Bjorn Carrier One",
+    "category": "Baby Products",
+    "price": 199.99,
+    "description": "Ergonomic baby carrier for newborn to toddler",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 45
+  },
+  {
+    "name": "Fisher-Price Rock 'n Play",
+    "category": "Baby Products",
+    "price": 79.99,
+    "description": "Portable baby rocker with calming vibrations",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Staples 24lb Copy Paper",
+    "category": "Office Supplies",
+    "price": 29.99,
+    "description": "Multipurpose paper 500 sheets per ream",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 345
+  },
+  {
+    "name": "Sharpie Permanent Markers 24-Pack",
+    "category": "Office Supplies",
+    "price": 19.99,
+    "description": "Fine point markers in assorted colors",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Swingline Electric Stapler",
+    "category": "Office Supplies",
+    "price": 49.99,
+    "description": "Heavy-duty electric stapler for office use",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Monopoly Board Game",
+    "category": "Board Games",
+    "price": 19.99,
+    "description": "Classic real estate trading board game",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Settlers of Catan",
+    "category": "Board Games",
+    "price": 54.99,
+    "description": "Strategy board game for 3-4 players",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 123
+  },
+  {
+    "name": "Ticket to Ride",
+    "category": "Board Games",
+    "price": 49.99,
+    "description": "Railway adventure board game for families",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Apple AirPods Pro 2nd Gen",
+    "category": "Audio",
+    "price": 249.99,
+    "description": "Wireless earbuds with active noise cancellation",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 167
+  },
+  {
+    "name": "Bose SoundLink Flex Speaker",
+    "category": "Audio",
+    "price": 149.99,
+    "description": "Portable Bluetooth speaker with waterproof design",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Sonos One Smart Speaker",
+    "category": "Audio",
+    "price": 219.99,
+    "description": "WiFi speaker with voice control and rich sound",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 78
+  },
+  {
+    "name": "Samsung 65-inch QLED TV",
+    "category": "Television",
+    "price": 1499.99,
+    "description": "4K QLED smart TV with quantum HDR",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 23
+  },
+  {
+    "name": "LG OLED 55-inch TV",
+    "category": "Television",
+    "price": 1299.99,
+    "description": "OLED 4K smart TV with perfect blacks",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 34
+  },
+  {
+    "name": "Roku Ultra Streaming Device",
+    "category": "Television",
+    "price": 99.99,
+    "description": "4K streaming player with voice remote",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 156
+  },
+  {
+    "name": "Ray-Ban Aviator Sunglasses",
+    "category": "Accessories",
+    "price": 154.99,
+    "description": "Classic pilot sunglasses with gold frame",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Michael Kors Leather Handbag",
+    "category": "Accessories",
+    "price": 298.00,
+    "description": "Saffiano leather tote bag in black",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Fossil Leather Wallet",
+    "category": "Accessories",
+    "price": 45.00,
+    "description": "Bifold leather wallet with multiple card slots",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 189
+  },
+  {
+    "name": "Vitamix Professional Blender",
+    "category": "Small Appliances",
+    "price": 449.99,
+    "description": "High-performance blender for smoothies and soups",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 45
+  },
+  {
+    "name": "Ninja Air Fryer",
+    "category": "Small Appliances",
+    "price": 99.99,
+    "description": "4-quart air fryer with rapid air circulation",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 123
+  },
+  {
+    "name": "Breville Espresso Machine",
+    "category": "Small Appliances",
+    "price": 699.99,
+    "description": "Semi-automatic espresso machine with milk steamer",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 34
+  },
+  {
+    "name": "Allbirds Tree Runners",
+    "category": "Sustainable Fashion",
+    "price": 98.00,
+    "description": "Eco-friendly sneakers made from eucalyptus fiber",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Reformation Midi Dress",
+    "category": "Sustainable Fashion",
+    "price": 248.00,
+    "description": "Vintage-inspired dress made from deadstock fabric",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 23
+  },
+  {
+    "name": "Everlane Organic Cotton T-Shirt",
+    "category": "Sustainable Fashion",
+    "price": 18.00,
+    "description": "Basic tee made from 100% organic cotton",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Philips Sonicare Toothbrush",
+    "category": "Personal Care",
+    "price": 79.99,
+    "description": "Electric toothbrush with pressure sensor",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 123
+  },
+  {
+    "name": "Gillette Fusion5 Razors",
+    "category": "Personal Care",
+    "price": 24.99,
+    "description": "Men's razors with 5 anti-friction blades",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 345
+  },
+  {
+    "name": "Olaplex Hair Treatment",
+    "category": "Personal Care",
+    "price": 28.00,
+    "description": "Professional hair repair treatment for damaged hair",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 167
+  },
+  {
+    "name": "Tile Mate Bluetooth Tracker",
+    "category": "Smart Home",
+    "price": 24.99,
+    "description": "Item finder with 200 ft range and loud ring",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 234
+  },
+  {
+    "name": "Nest Learning Thermostat",
+    "category": "Smart Home",
+    "price": 249.99,
+    "description": "Smart thermostat that learns your schedule",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  },
+  {
+    "name": "Ring Video Doorbell Pro",
+    "category": "Smart Home",
+    "price": 199.99,
+    "description": "HD video doorbell with motion detection",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 89
+  },
+  {
+    "name": "Hydro Flask Water Bottle 32oz",
+    "category": "Travel",
+    "price": 44.95,
+    "description": "Insulated stainless steel water bottle",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 345
+  },
+  {
+    "name": "Away Carry-On Suitcase",
+    "category": "Travel",
+    "price": 275.00,
+    "description": "Hard-shell carry-on with built-in battery",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 45
+  },
+  {
+    "name": "Pacsafe Anti-Theft Backpack",
+    "category": "Travel",
+    "price": 159.99,
+    "description": "Travel backpack with lockable zippers",
+    "image_url": "https://via.placeholder.com/150",
+    "stock": 67
+  }
+]

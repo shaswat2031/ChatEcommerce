@@ -308,6 +308,16 @@
 
           // Add products if any
           if (data.products && data.products.length > 0) {
+            // Add category header if available
+            if (data.category) {
+              chatBox.innerHTML += `
+                <div class="flex justify-center mb-4 animate-fadeInUp">
+                  <div class="bg-blue-100 text-blue-800 px-4 py-2 rounded-2xl text-sm font-medium">
+                    📂 ${data.category} Category
+                  </div>
+                </div>`;
+            }
+
             data.products.forEach((p) => {
               chatBox.innerHTML += `
                     <div class="bg-white border-2 border-gray-200 rounded-2xl p-5 mb-4 message-hover shadow-lg animate-fadeInUp">
